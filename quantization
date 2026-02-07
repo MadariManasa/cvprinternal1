@@ -1,0 +1,24 @@
+import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+def quantize_image(img, bits):
+levels = 2 ** bits
+step = 256 / levels
+q = (img // step) * step + step / 2
+return np.clip(q, 0, 255).astype(np.uint8)
+img = cv2.imread("image8.jpg")
+img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+bit_depths = [1, 2, 4]
+plt.figure(figsize=(12,4))
+plt.subplot(1, len(bit_depths)+1, 1)
+plt.imshow(img)
+plt.title("Original")
+plt.axis("off")
+for i, bits in enumerate(bit_depths, start=2):
+q_img = quantize_image(img, bits)
+plt.subplot(1, len(bit_depths)+1, i)
+plt.imshow(q_img)
+plt.title(f"{bits}-bit Quantized")
+plt.axis("off")
+plt.tight_layout()
+plt.show()
