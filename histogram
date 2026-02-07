@@ -1,25 +1,25 @@
-import cv2
-from matplotlib import pyplot as pt
-cat = cv2.imread(r"d:\23251A05D3_cvpr\Lab5\image.png", 0)
-if cat is None:
-raise FileNotFoundError("Image not found. Check file path.")
-cat_equalized = cv2.equalizeHist(cat)
-cat_hist = cv2.calcHist([cat], [0], None, [256], [0, 256])
-cat_equalized_hist = cv2.calcHist([cat_equalized], [0], None, [256], [0, 256])
-pt.figure(figsize=(12, 4))
-pt.subplot(1, 4, 1)
-pt.title("Original Image")
-pt.imshow(cat, cmap='gray')
-pt.axis('off')
-pt.subplot(1, 4, 2)
-pt.title("Equalized Image")
-pt.imshow(cat_equalized, cmap='gray')
-pt.axis('off')
-pt.subplot(1, 4, 3)
-pt.title("Original Histogram")
-pt.plot(cat_hist)
-pt.subplot(1, 4, 4)
-pt.title("Equalized Histogram")
-pt.plot(cat_equalized_hist)
-pt.tight_layout()
-pt.show()
+import cv2, matplotlib.pyplot as plt
+
+img = cv2.imread(r"C:\Users\madar\OneDrive\Desktop\sunny\image2.jpg")
+
+if img is None: raise FileNotFoundError("Image not found")
+
+# Ensure grayscale + uint8
+if img.ndim == 3:
+    img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+img = img.astype('uint8')
+
+eq = cv2.equalizeHist(img)
+hist = cv2.calcHist([img],[0],None,[256],[0,256])
+eq_hist = cv2.calcHist([eq],[0],None,[256],[0,256])
+
+titles = ["Original", "Equalized", "Original Hist", "Equalized Hist"]
+data = [img, eq, hist, eq_hist]
+
+plt.figure(figsize=(12,4))
+for i,(t,d) in enumerate(zip(titles,data),1):
+    plt.subplot(1,4,i); plt.title(t)
+    plt.imshow(d, cmap='gray') if i<3 else plt.plot(d)
+    plt.axis('off') if i<3 else None
+
+plt.show()
