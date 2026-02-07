@@ -1,0 +1,37 @@
+import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+img = cv2.imread("image.jpg")
+img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+bit_plane = 7
+bit_plane_img = ((img >> bit_plane) & 1) * 255
+bit_plane_img = bit_plane_img.astype(np.uint8)
+contrast_stretch = np.zeros_like(img)
+for i in range(3):
+r_min = np.min(img[:, :, i])
+r_max = np.max(img[:, :, i])
+contrast_stretch[:, :, i] = ((img[:, :, i] - r_min) / (r_max - r_min)) * 255
+contrast_stretch = contrast_stretch.astype(np.uint8)
+lower, upper = 100, 180
+intensity_slice = img.copy()
+mask = (img >= lower) & (img <= upper)
+intensity_slice[mask] = 255
+plt.figure(figsize=(12, 9))
+plt.subplot(2, 2, 1)
+plt.title("Original Image")
+plt.imshow(img)
+plt.axis("off")
+plt.subplot(2, 2, 2)
+plt.title("Bit Plane Slicing")
+plt.imshow(bit_plane_img)
+plt.axis("off")
+plt.subplot(2, 2, 3)
+plt.title("Contrast Stretching")
+plt.imshow(contrast_stretch)
+plt.axis("off")
+plt.subplot(2, 2, 4)
+plt.title("Intensity Level Slicing")
+plt.imshow(intensity_slice)
+plt.axis("off")
+plt.tight_layout()
+plt.show()
