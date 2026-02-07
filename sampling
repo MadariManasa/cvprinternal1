@@ -1,0 +1,17 @@
+import cv2
+import matplotlib.pyplot as plt
+image=cv2.imread('image4.jpg')
+k_values=[2,4,8,16]
+plt.figure(figsize=(10,4))
+plt.subplot(1,5,1)
+plt.title("Original")
+plt.imshow(image)
+plt.axis("off")
+for i,k in enumerate(k_values):
+sampled=image[::k,::k]
+plt.subplot(1,5,i+2)
+plt.title(f"k={k}")
+plt.imshow(sampled)
+plt.axis("off")
+plt.tight_layout()
+plt.show()
